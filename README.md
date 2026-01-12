@@ -20,3 +20,44 @@ This project demonstrates the manual and automated setup of a secure, public-fac
 * Linux Administration
 * Network Security (ACLs/Security Groups)
 * Automation & Scripting
+
+## How to Replicate This Environment
+Follow these steps to deploy the web application using the provided automation script.
+
+1. Prerequisites
+An AWS Account with an existing S3 Bucket containing your app.zip and npm-cache.tar.gz.
+
+An IAM Role (Instance Profile) with AmazonS3ReadOnlyAccess permissions.
+
+2. Network Configuration
+Create a VPC (CIDR 10.10.0.0/16).
+
+Create a Public Subnet and attach an Internet Gateway.
+
+Ensure your Route Table has a route (0.0.0.0/0) pointing to the Internet Gateway.
+
+3. Security Group Setup
+Create a Security Group named WebAppSG with the following rules:
+
+Inbound: Allow HTTP (Port 80) and HTTPS (Port 443) from 0.0.0.0/0.
+
+Outbound: Allow all traffic (or restrict to Port 53 for DNS and S3 Prefix Lists for higher security).
+
+4. Launching the Instance
+AMI: Amazon Linux 2023.
+
+Instance Type: t3.micro.
+
+Network: Select your custom VPC and Public Subnet.
+
+Public IP: Set to Enable.
+
+IAM Instance Profile: Select the role created in Step 1.
+
+5. Bootstrap the Server
+In the Advanced Details section, copy the contents of scripts/deploy-webapp.sh and paste it into the User Data field.
+
+Note: Ensure you update the S3_BUCKET variable in the script with your specific bucket name.
+
+6. Verification
+Once the instance status checks pass, copy the Public IPv4 address and paste it into your browser using http://
